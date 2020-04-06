@@ -103,13 +103,7 @@ when "slideshow"
 when "generate"
   Vimdeck::Slideshow.generate(file, options)
 when "open"
-  if ARGV.length == 2
-    puts "Vimdeck will open already existing slides"
-    puts "File name will be ignored"
-    sleep 3
-  end
-
-  Vimdeck::Slideshow.open
+  Vimdeck::Slideshow.open(file)
 else
   Vimdeck::Slideshow.start(file, options)
 end

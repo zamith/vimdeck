@@ -161,7 +161,7 @@ module Vimdeck
       slides = File.read(filename)
 
       renderer = Redcarpet::Markdown.new(Vimdeck::Render, :fenced_code_blocks => true)
-      Dir.mkdir("presentation") unless File.exists?("presentation")
+      Dir.mkdir(filename) unless Dir.exists?(filename)
       @buffers = []
 
       # Slide separator is 3 newlines
@@ -237,7 +237,7 @@ module Vimdeck
           match = match.post_match.match(regex)
         end
 
-        File.open("presentation/slide#{slide_num}#{extension}", "w") do |file|
+        File.open("#{filename}/slide#{slide_num}#{extension}", "w") do |file|
           file.write("#{slide}#{$nl}")
         end
 
@@ -245,20 +245,20 @@ module Vimdeck
         i += 1
       end
 
-      File.open("presentation/script.vim", "w") do |file|
+      File.open("#{filename}/script.vim", "w") do |file|
         file.write script_template
       end
     end
 
-    def self.open
+    def self.open(filename)
       extension = @options[:no_filetype] ? ".txt" : ".md"
       editor = options[:editor] || "vim"
-      exec "#{editor} presentation/*#{extension} -S presentation/script.vim"
+      exec "#{editor} #{filename}/*#{extension} -S #{filename}/script.vim"
     end
 
     def self.start(filename, options)
       generate(filename, options)
-      open
+      open(filename)
     end
   end
 end
